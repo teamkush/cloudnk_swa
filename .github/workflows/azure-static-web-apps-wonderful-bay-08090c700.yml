@@ -1,4 +1,5 @@
 name: Azure Static Web Apps CI/CD
+
 on:
   push:
     branches:
@@ -18,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     permissions:
-       id-token: write
-       contents: read
+      id-token: write
+      contents: read
     steps:
       # Checkout the repository
       - uses: actions/checkout@v3
@@ -32,13 +33,13 @@ jobs:
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WONDERFUL_BAY_08090C700 }}
           action: "upload"
           ###### Repository/Build Configurations ######
-          app_location: "/" # Path to your static files
-          api_location: "" # No API for this project
-          output_location: "/" # Same as app_location for static files
-          app_build_command: "" # Explicitly skip the build step
+          app_location: "/"  # Root directory if your static files (index.html, etc.) are at the root
+          api_location: ""  # No API for this project
+          output_location: "/"  # Same location for output
+          app_build_command: ""  # Skip build step as this is a static HTML project
           ###### End of Configurations ######
 
   close_pull_request_job:
