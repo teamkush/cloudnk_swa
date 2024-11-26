@@ -21,37 +21,32 @@ jobs:
        id-token: write
        contents: read
     steps:
+      # Checkout the repository
       - uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
-      - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
-      - name: Get Id Token
-        uses: actions/github-script@v6
-        id: idtoken
-        with:
-           script: |
-               const coredemo = require('@actions/core')
-               return await coredemo.getIDToken()
-           result-encoding: string
+
+      # Deploy to Azure Static Web Apps
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WONDERFUL_BAY_08090C700 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "upload"
-          app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "/" # Built app content directory - optional
-          app_build_command: "" # Skip build for static files
-          github_id_token: ${{ steps.idtoken.outputs.result }}
+          ###### Repository/Build Configurations ######
+          app_location: "/" # Path to your static files
+          api_location: "" # No API for this project
+          output_location: "/" # Same as app_location for static files
+          app_build_command: "" # Explicitly skip the build step
+          ###### End of Configurations ######
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
     steps:
+      # Close pull request deployment (optional)
       - name: Close Pull Request
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
